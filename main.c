@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define MAX 30
 
 
@@ -37,16 +38,14 @@ void showStudents (student_type student[], int qtd)
     }
 }
 
-//void
-
 /*
 Function to insert the students and save it to the structure.
 */
 
-int insertStudent (student_type student[], int qtd)
+int insertStudent (student_type student[], int oldStudentIndex, int newStudentIndex)
 {
     int i;
-    for (i=0;i<qtd;i++)
+    for (i=oldStudentIndex;i<newStudentIndex;i++)
     {
         printf("\n---Student %d---\n",i+1);
         fflush(stdin);
@@ -69,18 +68,42 @@ int insertStudent (student_type student[], int qtd)
     return i;
 }
 
+int deleteStudent(student_type student[], char studentToDelete[], int newStudentIndex)
+{
+    int i;
+
+    for(i = 0; i < newStudentIndex; i++)
+    {
+        if(!strcmp(student[i].name,studentToDelete))
+        {
+            while(i < newStudentIndex-1)
+            {
+                strcpy(student[i].name,student[i+1].name);
+                student[i].age = student[i+1].age;
+                student[i].sex = student[i+1].sex;
+                i++;
+            }
+            student[i].name[0] = '\0';
+            student[i].age = 0;
+            student[i].sex = 0;
+        }
+    }
+    return i-1;
+}
+
+
 char form()
 {
     char r;
     do
     {
-        printf("---Main menu---\n");
+        printf("\n---Main menu---\n");
         printf("1- Manage students.\n");
         printf("2- Manage activities.\n");
         printf("3- Manage teams.\n");
         printf("4- In progress.\n");
         printf("5- In progress.\n");
-        printf("s/S- Preencher estruturas.\n");
+        printf("s/S- Exit.\n");
         r=getch();
     }
     while (r!='s' && r!='S' && r!='1' && r!='2' && r!='3' && r!='4' && r!='5');
@@ -92,7 +115,7 @@ char formStudents()
     char r;
     do
     {
-        printf("---Student Section---\n");
+        printf("\n---Student Section---\n");
         printf("1- Insert a new student.\n");
         printf("2- Show students.\n");
         printf("3- Delete a student.\n");
@@ -109,7 +132,7 @@ char formActivity()
     char r;
     do
     {
-        printf("---Activity Section---\n");
+        printf("\n---Activity Section---\n");
         printf("1- Insert a new activity.\n");
         printf("2- Show activities.\n");
         printf("3- Delete an activity.\n");
@@ -126,7 +149,7 @@ char formTeam()
     char r;
     do
     {
-        printf("---Team Section---\n");
+        printf("\n---Team Section---\n");
         printf("1- Insert a new team.\n");
         printf("2- Show teams.\n");
         printf("3- Delete a team.\n");
@@ -143,7 +166,7 @@ char formTeamMan()
     char r;
     do
     {
-        printf("---Team Section---\n");
+        printf("\n---Team Section---\n");
         printf("1- Insert a new team.\n");
         printf("2- Show teams.\n");
         printf("3- Delete a team.\n");
@@ -158,13 +181,10 @@ char formTeamMan()
 int main()
 {
     student_type student[MAX];
-    int studentIndex;
+    int oldStudentIndex = 0, newStudentIndex = 0, studentsToSave = 0;
     char ch;
+    char studentToDelete[21];
 
-    /*printf("Enter the number of students to save: ");
-    scanf("%d", &studentIndex);
-    insertStudent(student, studentIndex);
-    showStudents(student, studentIndex);*/
     do
     {
         ch = form();
@@ -178,16 +198,24 @@ int main()
                         switch(ch)
                         {
                             case '1':
-                                { //insert new students
-                                break;
+                                {
+                                    printf("Enter the number of students to save: ");
+                                    scanf("%d", &studentsToSave);
+                                    newStudentIndex = oldStudentIndex + studentsToSave;
+                                    oldStudentIndex = insertStudent(student, oldStudentIndex, newStudentIndex);
+                                    break;
                                 }
                             case '2':
-                                { //show students
-                                break;
+                                {
+                                    showStudents(student, newStudentIndex);
+                                    break;
                                 }
                             case '3':
-                                { //delete student
-                                break;
+                                {
+                                    printf("Enter the student's name to delete: ");
+                                    gets(studentToDelete);
+                                    newStudentIndex = deleteStudent(student, studentToDelete, newStudentIndex);
+                                    break;
                                 }
                             case '4':
                                 { //search student
