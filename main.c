@@ -26,21 +26,10 @@ typedef struct team_prog
     student_type student[9];
 }team_type;
 
-void showStudents (student_type student[], int qtd)
-{
-    int i;
-    for (i=0;i<qtd;i++)
-    {
-        printf("\n---Student %d---\n",i+1);
-        printf("%s\n",student[i].name);
-        printf("%d\n",student[i].age);
-        printf("%c\n",student[i].sex);
-    }
-}
-
 /*
 Function to insert the students and save it to the structure.
 */
+
 
 int insertStudent (student_type student[], int oldStudentIndex, int newStudentIndex)
 {
@@ -66,6 +55,18 @@ int insertStudent (student_type student[], int oldStudentIndex, int newStudentIn
         }while(student[i].sex != 'F' && student[i].sex != 'M');
     }
     return i;
+}
+
+void showStudents (student_type student[], int qtd)
+{
+    int i;
+    for (i=0;i<qtd;i++)
+    {
+        printf("\n---Student %d---\n",i+1);
+        printf("%s\n",student[i].name);
+        printf("%d\n",student[i].age);
+        printf("%c\n",student[i].sex);
+    }
 }
 
 int deleteStudent(student_type student[], char studentToDelete[], int newStudentIndex)
@@ -155,7 +156,37 @@ int deleteActivity(activity_type activity[], int activityToDelete, int newActivi
     }
     return i-1;
 }
+/*
+int insertTeam (team_type team[],student_type student[], int oldTeamIndex, int newTeamIndex)
+{
+    int i,j,k,studentsToAdd;
+    char nameToAdd[21];
+    for (i=oldTeamIndex;i<newTeamIndex;i++)
+    {
+        printf("\n---Team %d---\n",i+1);
+        fflush(stdin);
+        printf("Team's name %d?\n",i+1);
+        gets(team[i].name);
+        fflush(stdin);
+        gets(team[i].locality);
+        fflush(stdin);
+        do
+        {
+            printf("Enter how many students to add to team %s: ", team[i].name);
+            scanf("%d", studentsToAdd);
+            fflush(stdin);
+        }while(studentsToAdd < 0 || studentsToAdd > 8)
+        for(j = 0; j < studentsToAdd; j++)
+        {
+            printf("Enter a name from the database to add to team %s", team[i].name);
+            gets(nameToAdd);
+            for(k = 0; k < )
 
+        }
+    }
+    return i;
+}
+*/
 char form()
 {
     char r;
@@ -242,14 +273,72 @@ char formTeamMan()
     return r;
 }
 
+void init(team_type team[])
+{
+    int i,j,k,m = 0;
+    int randomAge,randomID,randomNC,randomTime;
+    char teamNames[6][7] = { "team1","team2","team3","team4","team5","team6" };
+    char teamLocalities[6][11] = { "local1","local2","local3","local4","local5","local6"};
+    char studentNames[64][21] = {  "name1","name2","name3","name4","name5","name6","name7","name8"
+                                    "name9","name10","name11","name12","name13","name14","name15","name16"
+                                    "name17","name18","name19","name20","name21","name22","name23","name24"
+                                    "name25","name26","name27","name28","name29","name30","name31","name32"
+                                    "name33","name34","name35","name36","name37","name38","name39","name40"
+                                    "name41","name42","name43","name44","name45","name46","name47","name48"
+                                    "name49","name50","name51","name52","name53","name54","name55","name56"
+                                    "name57","name58","name59","name60","name61","name62","name63","name64"
+                                 };
+    for(i = 0; i < 6; i++)
+    {
+        strcpy(team[i].name,teamNames[i]);
+        strcpy(team[i].locality,teamLocalities[i]);
+        for(j = 0; j < 8; j++, k++)
+        {
+            strcpy(team[i].student[j].name,studentNames[k]);
+            do
+            {
+                randomAge = rand() % 30;
+            }while(randomAge < 10);
+            team[i].student[j].age = randomAge;
+            if(i%2) team[i].student[j].sex = 'M';
+            else team[i].student[j].sex = 'F';
+            for(m = 0; m < 5; m++)
+            {
+                do
+                {
+                    randomID = rand() % 1000;
+                }while(randomID <= 0);
+                team[i].student[j].activity[m].id = randomID;
+                do
+                {
+                    randomNC = rand() % 30;
+                }while(randomNC <= 0);
+                team[i].student[j].activity[m].NC = randomNC;
+                do
+                {
+                    randomTime = rand() % 12;
+                    randomTime = randomTime * 10;
+                }while(randomTime <= 0);
+                team[i].student[j].activity[m].id = randomTime;
+            }
+        }
+    }
+}
+
+
 int main()
 {
     student_type student[MAX];
     activity_type activity[100];
+    team_type team[100];
     int oldStudentIndex = 0, newStudentIndex = 0, studentsToInsert = 0;
     char studentToDelete[21];
     int oldActivityIndex = 0, newActivityIndex = 0, activitiesToInsert = 0;
     int activityToDelete = 0;
+    int oldTeamIndex = 0, newTeamIndex = 0, teamsToInsert = 0;
+
+    init(team);
+
     char ch;
 
     do
@@ -342,9 +431,11 @@ int main()
                         {
                             case '1':
                                 { //insert new team
-                                    //insertTeam(team, )
-
-                                    break;
+                                   /* printf("Enter the number of teams to save: ");
+                                    scanf("%d", &teamsToInsert);
+                                    newTeamIndex = oldTeamIndex + teamsToInsert;
+                                    oldTeamIndex = insertTeam(team, oldTeamIndex, newTeamIndex, student, newStudentIndex);
+                                    */break;
                                 }
                             case '2':
                                 { //show teams (alphabetically sorted)
