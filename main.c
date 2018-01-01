@@ -91,6 +91,70 @@ int deleteStudent(student_type student[], char studentToDelete[], int newStudent
     return i-1;
 }
 
+int insertActivity (activity_type activity[], int oldActivityIndex, int newActivityIndex)
+{
+    int i;
+    for (i=oldActivityIndex;i<newActivityIndex;i++)
+    {
+        printf("\n---Activity %d---\n",i+1);
+        fflush(stdin);
+        do
+        {
+            printf("Activity's ID %d?\n",i+1);
+            scanf("%d", &activity[i].id);
+            fflush(stdin);
+        }while(activity[i].id < 0);
+        do
+        {
+            printf("Correct answers of activity %d?\n",i+1);
+            scanf("%d", &activity[i].NC);
+            fflush(stdin);
+        }while(activity[i].NC < 0);
+        do
+        {
+            printf("Time in minutes for activity %d?\n",i+1);
+            scanf("%f", &activity[i].time);
+            fflush(stdin);
+        }while(activity[i].time < 0);
+    }
+    return i;
+}
+
+void showActivities (activity_type activity[], int qtd)
+{
+    int i;
+    for (i=0;i<qtd;i++)
+    {
+        printf("\n---Activity %d---\n",i+1);
+        printf("%d\n",activity[i].id);
+        printf("%d\n",activity[i].NC);
+        printf("%.2f\n",activity[i].time);
+    }
+}
+
+int deleteActivity(activity_type activity[], int activityToDelete, int newActivityIndex)
+{
+    int i;
+
+    for(i = 0; i < newActivityIndex; i++)
+    {
+        if(activity[i].id == activityToDelete)
+        {
+            while(i < newActivityIndex-1)
+            {
+                activity[i].id = activity[i+1].id;
+                activity[i].NC = activity[i+1].NC;
+                activity[i].time = activity[i+1].time;
+                i++;
+            }
+            activity[i].id = 0;
+            activity[i].NC = 0;
+            activity[i].time = 0;
+            printf("\nThe activity with the ID: %d is deleted.\n", activityToDelete);
+        }
+    }
+    return i-1;
+}
 
 char form()
 {
@@ -181,9 +245,12 @@ char formTeamMan()
 int main()
 {
     student_type student[MAX];
-    int oldStudentIndex = 0, newStudentIndex = 0, studentsToSave = 0;
-    char ch;
+    activity_type activity[100];
+    int oldStudentIndex = 0, newStudentIndex = 0, studentsToInsert = 0;
     char studentToDelete[21];
+    int oldActivityIndex = 0, newActivityIndex = 0, activitiesToInsert = 0;
+    int activityToDelete = 0;
+    char ch;
 
     do
     {
@@ -199,19 +266,22 @@ int main()
                         {
                             case '1':
                                 {
+                                    //insert new student
                                     printf("Enter the number of students to save: ");
-                                    scanf("%d", &studentsToSave);
-                                    newStudentIndex = oldStudentIndex + studentsToSave;
+                                    scanf("%d", &studentsToInsert);
+                                    newStudentIndex = oldStudentIndex + studentsToInsert;
                                     oldStudentIndex = insertStudent(student, oldStudentIndex, newStudentIndex);
                                     break;
                                 }
                             case '2':
                                 {
+                                    //show student
                                     showStudents(student, newStudentIndex);
                                     break;
                                 }
                             case '3':
                                 {
+                                    //delete student
                                     printf("Enter the student's name to delete: ");
                                     gets(studentToDelete);
                                     newStudentIndex = deleteStudent(student, studentToDelete, newStudentIndex);
@@ -233,16 +303,27 @@ int main()
                         switch(ch)
                         {
                             case '1':
-                                { //insert new activity
-                                break;
+                                {
+                                    //insert activity
+                                    printf("Enter the number of activities to save: ");
+                                    scanf("%d", &activitiesToInsert);
+                                    newActivityIndex = oldActivityIndex + activitiesToInsert;
+                                    oldActivityIndex = insertActivity(activity, oldActivityIndex, newActivityIndex);
+                                    break;
                                 }
                             case '2':
-                                { //show activities
-                                break;
+                                {
+                                    //show activity
+                                    showActivities(activity, newActivityIndex);
+                                    break;
                                 }
                             case '3':
-                                { //delete activities
-                                break;
+                                {
+                                    //delete activity
+                                    printf("Enter the activity's ID to delete: ");
+                                    scanf("%d", &activityToDelete);
+                                    newActivityIndex = deleteActivity(activity, activityToDelete, newActivityIndex);
+                                    break;
                                 }
                             case '4':
                                 { //search activities
@@ -261,7 +342,9 @@ int main()
                         {
                             case '1':
                                 { //insert new team
-                                break;
+                                    //insertTeam(team, )
+
+                                    break;
                                 }
                             case '2':
                                 { //show teams (alphabetically sorted)
