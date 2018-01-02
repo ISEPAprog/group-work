@@ -229,7 +229,7 @@ char form()
         printf("2- Manage activities.\n");
         printf("3- Show team.\n");
         printf("4- Team info.\n");
-        printf("5- In progress.\n");
+        printf("5- Credits.\n");
         printf("s/S- Exit.\n");
         r=getch();
     }
@@ -590,9 +590,11 @@ int main()
                 break;
                 }
             case '5':
-                { //ordenar por idade
-                //ordenarPorIdade(aluno,qtd);
-                getch(); break;
+                { 
+                    printf("Work made by:\n");
+                    printf("João Figueiredo 1170655\n");
+                    printf("Döme Oláh 1170237\n");
+                    break;
                 }
         }
     } while(ch!='s' && ch!='S');
