@@ -329,7 +329,6 @@ int init(team_type team[], int *teamQtt)
         for(j = 0; j < 8; j++, k++)
         {
             strcpy(team[i].student[j].name,studentNames[k]);
-
             do
             {
                 randomAge = rand() % 30;
@@ -389,26 +388,22 @@ int wastedTime (activity_type activity[], int ActNum)
 
 void searchStudents (team_type team[], char name[21], int teamQtt)
 {
+    char arr[21];
     int x=0,y=0,i,j;
     for (i=0;i<teamQtt;i++)
     {
         for (j=0;j<8;j++)
         {
-            if(!(strcmp(team[i].student[j].name, name)))
+            strcpy(arr,team[i].student[j].name);
+            if(!strcmp(team[i].student[j].name, name))
             {
-                x=i;
-                y=j;
+                printf("--- Student ---\n");
+                printf("Name: \t%s\n",team[i].student[j].name);
+                printf("Age: \t%d\n",team[i].student[j].age);
+                printf("Gender: %c\n\n",team[i].student[j].sex);
             }
         }
     }
-    if(x!=0)
-    {
-        printf("--- Student---\n");
-        printf("Name: \t%s\n",team[x].student[y].name);
-        printf("Age: \t%d\n",team[x].student[y].age);
-        printf("Gender: %c\n\n",team[x].student[y].sex);
-    }
-    else printf("Not found!!!");
 }
 
 
@@ -487,7 +482,7 @@ int main()
                                     printf("Enter the student's name to search: ");
                                     gets(studentToSearch);
                                     fflush(stdin);
-                                    searchStudents(student, studentToSearch, teamQtt);
+                                    searchStudents(teams, studentToSearch, teamQtt);
 
                                 break;
                                 }
