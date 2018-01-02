@@ -392,18 +392,22 @@ void searchStudents (team_type team[], char name[21], int teamQtt)
     int x=0,y=0,i,j;
     for (i=0;i<teamQtt;i++)
     {
-        for (j=0;j<8;i++)
+        for (j=0;j<8;j++)
+        {
+            if(!(strcmp(team[i].student[j].name, name)))
             {
-                if(strcmp(team[i].student[j].name, name))x=i,y=j;
+                x=i;
+                y=j;
             }
+        }
     }
     if(x!=0)
-        {
-            printf("--- Student---\n");
-            printf("Name: \t%s\n",team[x].student[y].name);
-            printf("Age: \t%d\n",team[x].student[y].age);
-            printf("Gender: %c\n\n",team[x].student[y].sex);
-        }
+    {
+        printf("--- Student---\n");
+        printf("Name: \t%s\n",team[x].student[y].name);
+        printf("Age: \t%d\n",team[x].student[y].age);
+        printf("Gender: %c\n\n",team[x].student[y].sex);
+    }
     else printf("Not found!!!");
 }
 
@@ -415,7 +419,7 @@ int fillActivity(activity_type activity[])
     {
         activity[i].id = rand();
     }
-    return 10;
+    return i;
 }
 
 int main()
