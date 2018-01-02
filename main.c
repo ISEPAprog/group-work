@@ -227,7 +227,7 @@ char form()
         printf("\n---Main menu---\n");
         printf("1- Manage students.\n");
         printf("2- Manage activities.\n");
-        printf("3- Manage teams.\n");
+        printf("3- Show team.\n");
         printf("4- Team info.\n");
         printf("5- In progress.\n");
         printf("s/S- Exit.\n");
@@ -277,10 +277,7 @@ char formTeam()
     do
     {
         printf("\n---Team Section---\n");
-        printf("1- Insert a new team.\n");
-        printf("2- Show teams.\n");
-        printf("3- Delete a team.\n");
-        printf("4- Search a team.\n");
+        printf("1- Show a team members.\n");
         printf("r/R- Return to menu.\n");
         r=getch();
     }
@@ -388,24 +385,42 @@ int wastedTime (activity_type activity[], int ActNum)
 
 void searchStudents (team_type team[], char name[21], int teamQtt)
 {
-    char arr[21];
-    int x=0,y=0,i,j;
+    int i,j;
     for (i=0;i<teamQtt;i++)
     {
         for (j=0;j<8;j++)
         {
-            strcpy(arr,team[i].student[j].name);
             if(!strcmp(team[i].student[j].name, name))
             {
                 printf("--- Student ---\n");
                 printf("Name: \t%s\n",team[i].student[j].name);
                 printf("Age: \t%d\n",team[i].student[j].age);
                 printf("Gender: %c\n\n",team[i].student[j].sex);
+                return;
             }
         }
     }
 }
 
+void showATeam(team_type team[], char teamToShow[], int teamQtt)
+{
+    int i,j;
+    for(i = 0; i < teamQtt; i++)
+    {
+        if(!strcmp(team[i].name, teamToShow))
+        {
+            printf("\n--- %s ---\n\n",teamToShow);
+            for(j = 0; j < 8; j++)
+            {
+                printf("--- Student %d ---\n", j+1);
+                printf("Name: \t%s\n",team[i].student[j].name);
+                printf("Age: \t%d\n",team[i].student[j].age);
+                printf("Gender: %c\n\n",team[i].student[j].sex);
+            }
+            return;
+        }
+    }
+}
 
 int fillActivity(activity_type activity[])
 {
@@ -425,6 +440,7 @@ int main()
     int oldStudentIndex = 0, newStudentIndex = 0, studentsToInsert = 0;
     char studentToDelete[21];
     char teamToInsert[21];
+    char teamToShow[7];
     char studentToSearch[21];
     int oldActivityIndex = 0, newActivityIndex = 0, activitiesToInsert = 0;
     int activityToDelete = 0;
@@ -483,7 +499,6 @@ int main()
                                     gets(studentToSearch);
                                     fflush(stdin);
                                     searchStudents(teams, studentToSearch, teamQtt);
-
                                 break;
                                 }
                         }
@@ -536,28 +551,15 @@ int main()
                         switch(ch)
                         {
                             case '1':
-                                { //insert new team
-                                   /* printf("Enter the number of teams to save: ");
-                                    scanf("%d", &teamsToInsert);
-                                    newTeamIndex = oldTeamIndex + teamsToInsert;
-                                    oldTeamIndex = insertTeam(team, oldTeamIndex, newTeamIndex, student, newStudentIndex);
-                                    */break;
-                                }
-                            case '2':
-                                { //show teams (alphabetically sorted)
-
+                                {
+                                    printf("Enter team to display: ");
+                                    gets(teamToShow);
+                                    fflush(stdin);
+                                    showATeam(teams,teamToShow, teamQtt);
                                     break;
                                 }
-                            case '3':
-                                { //delete team
-                                break;
-                                }
-                            case '4':
-                                { //search teams and give option to show the elements
-                                break;
-                                }
                         }
-                    } while(ch!='r' && ch!='R');
+                    }while(ch!='r' && ch!='R');
                 break;
                 }
             case '4':
