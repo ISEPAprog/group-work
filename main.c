@@ -27,9 +27,109 @@ typedef struct team_prog
     student_type student[9];
 }team_type;
 
-
 int teamInd, studInd[100], actInd[100];
 
+/*
+    The main menu.
+*/
+
+char form()
+{
+    char r;
+    do
+    {
+        printf("\n---Main menu---\n");
+        printf("1- Manage students.\n");
+        printf("2- Manage activities.\n");
+        printf("3- Show team.\n");
+        printf("4- Team info.\n");
+        printf("5- Credits.\n");
+        printf("s/S- Exit.\n");
+        r=getch();
+    }
+    while (r!='s' && r!='S' && r!='1' && r!='2' && r!='3' && r!='4' && r!='5');
+    return r;
+}
+
+/*
+    Menu of the student part.
+*/
+
+char formStudents()
+{
+    char r;
+    do
+    {
+        printf("\n---Student Section---\n");
+        printf("1- Insert a new student.\n");
+        printf("2- Show students.\n");
+        printf("3- Delete a student.\n");
+        printf("4- Search a student.\n");
+        printf("r/R- Return to menu.\n");
+        r=getch();
+    }
+    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3' && r!='4');
+    return r;
+}
+
+/*
+    Menu of the activity part.
+*/
+
+char formActivity()
+{
+    char r;
+    do
+    {
+        printf("\n---Activity Section---\n");
+        printf("1- Insert a new activity.\n");
+        printf("2- Show activities.\n");
+        printf("3- Delete an activity.\n");
+        printf("4- Search an activity.\n");
+        printf("r/R- Return to menu.\n");
+        r=getch();
+    }
+    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3' && r!='4');
+    return r;
+}
+
+/*
+    This menu just have one point, with it, the user can show a team's members.
+*/
+
+char formTeam()
+{
+    char r;
+    do
+    {
+        printf("\n---Team Section---\n");
+        printf("1- Show a team's members.\n");
+        printf("r/R- Return to menu.\n");
+        r=getch();
+    }
+    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3' && r!='4');
+    return r;
+}
+
+/*
+    The user can reach some specific values about the teams.
+*/
+
+char formTeamMan()
+{
+    char r;
+    do
+    {
+        printf("\n---Team Info---\n");
+        printf("1- Total and average of answers.\n");
+        printf("2- Average Age.\n");
+        printf("3- Time per activity.\n");
+        printf("r/R- Return to menu.\n");
+        r=getch();
+    }
+    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3');
+    return r;
+}
 
 /*
 Function to insert the students and save it to the structure.
@@ -75,9 +175,11 @@ int insertStudent (team_type team[], int oldStudentIndex, int newStudentIndex, c
         }while(team[j].student[i].sex != 'F' && team[j].student[i].sex != 'M');
     }
     return i;
-
-
 }
+
+/*
+    Function to show students.
+*/
 
 void showStudents (team_type team[], int qtd)
 {
@@ -91,15 +193,13 @@ void showStudents (team_type team[], int qtd)
             printf("Name: \t%s\n",team[i].student[j].name);
             printf("Age: \t%d\n",team[i].student[j].age);
             printf("Gender: %c\n\n",team[i].student[j].sex);
-            /*for(k = 0;k < 5; k++)
-            {
-                printf("%d\n",team[i].student[j].activity[k].id);
-                printf("%d",team[i].student[j].activity[k].NC);
-                printf("",team[i].student[j].activity[k].time);
-            }*/
         }
     }
 }
+
+/*
+    Function to delete students.
+*/
 
 int deleteStudent(student_type student[], char studentToDelete[], int newStudentIndex)
 {
@@ -123,6 +223,10 @@ int deleteStudent(student_type student[], char studentToDelete[], int newStudent
     }
     return i-1;
 }
+
+/*
+    Function to insert activity.
+*/
 
 int insertActivity (activity_type activity[], int oldActivityIndex, int newActivityIndex)
 {
@@ -153,6 +257,10 @@ int insertActivity (activity_type activity[], int oldActivityIndex, int newActiv
     return i;
 }
 
+/*
+    Function to show activities.
+*/
+
 void showActivities (activity_type activity[], int qtd)
 {
     int i;
@@ -164,6 +272,10 @@ void showActivities (activity_type activity[], int qtd)
         printf("%.2f\n",activity[i].time);
     }
 }
+
+/*
+    Function to delete activities.
+*/
 
 int deleteActivity(activity_type activity[], int activityToDelete, int newActivityIndex)
 {
@@ -188,119 +300,10 @@ int deleteActivity(activity_type activity[], int activityToDelete, int newActivi
     }
     return i-1;
 }
+
 /*
-int insertTeam (team_type team[],student_type student[], int oldTeamIndex, int newTeamIndex)
-{
-    int i,j,k,studentsToAdd;
-    char nameToAdd[21];
-    for (i=oldTeamIndex;i<newTeamIndex;i++)
-    {
-        printf("\n---Team %d---\n",i+1);
-        fflush(stdin);
-        printf("Team's name %d?\n",i+1);
-        gets(team[i].name);
-        fflush(stdin);
-        gets(team[i].locality);
-        fflush(stdin);
-        do
-        {
-            printf("Enter how many students to add to team %s: ", team[i].name);
-            scanf("%d", studentsToAdd);
-            fflush(stdin);
-        }while(studentsToAdd < 0 || studentsToAdd > 8)
-        for(j = 0; j < studentsToAdd; j++)
-        {
-            printf("Enter a name from the database to add to team %s", team[i].name);
-            gets(nameToAdd);
-            for(k = 0; k < )
-
-        }
-    }
-    return i;
-}
+    The initial dataset of the program. The program loads the datas to the correct places at the beginning.
 */
-char form()
-{
-    char r;
-    do
-    {
-        printf("\n---Main menu---\n");
-        printf("1- Manage students.\n");
-        printf("2- Manage activities.\n");
-        printf("3- Show team.\n");
-        printf("4- Team info.\n");
-        printf("5- Credits.\n");
-        printf("s/S- Exit.\n");
-        r=getch();
-    }
-    while (r!='s' && r!='S' && r!='1' && r!='2' && r!='3' && r!='4' && r!='5');
-    return r;
-}
-
-char formStudents()
-{
-    char r;
-    do
-    {
-        printf("\n---Student Section---\n");
-        printf("1- Insert a new student.\n");
-        printf("2- Show students.\n");
-        printf("3- Delete a student.\n");
-        printf("4- Search a student.\n");
-        printf("r/R- Return to menu.\n");
-        r=getch();
-    }
-    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3' && r!='4');
-    return r;
-}
-
-char formActivity()
-{
-    char r;
-    do
-    {
-        printf("\n---Activity Section---\n");
-        printf("1- Insert a new activity.\n");
-        printf("2- Show activities.\n");
-        printf("3- Delete an activity.\n");
-        printf("4- Search an activity.\n");
-        printf("r/R- Return to menu.\n");
-        r=getch();
-    }
-    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3' && r!='4');
-    return r;
-}
-
-char formTeam()
-{
-    char r;
-    do
-    {
-        printf("\n---Team Section---\n");
-        printf("1- Show a team members.\n");
-        printf("r/R- Return to menu.\n");
-        r=getch();
-    }
-    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3' && r!='4');
-    return r;
-}
-
-char formTeamMan()
-{
-    char r;
-    do
-    {
-        printf("\n---Team Info---\n");
-        printf("1- Right answers.\n");
-        printf("2- Average Age.\n");
-        printf("3- Time per activity.\n");
-        printf("r/R- Return to menu.\n");
-        r=getch();
-    }
-    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3');
-    return r;
-}
-
 
 int init(team_type team[], int *teamQtt)
 {
@@ -314,14 +317,12 @@ int init(team_type team[], int *teamQtt)
                                     "name25","name26","name27","name28","name29","name30","name31","name32",     //4th team
                                     "name33","name34","name35","name36","name37","name38","name39","name40",     //5th team
                                     "name41","name42","name43","name44","name45","name46","name47","name48"     //6th team
-                                    /*"name49","name50","name51","name52","name53","name54","name55","name56"     //7th team
-                                    "name57","name58","name59","name60","name61","name62","name63","name64"     //8th team*/
                                  };
     int students=6*8;
     (*teamQtt)=6;
     for(i = 0; i < 6; i++)
     {
-        strcpy(team[i].name,teamNames[i]);                          //Gives initial values to the structure
+        strcpy(team[i].name,teamNames[i]);
         strcpy(team[i].locality,teamLocalities[i]);
         for(j = 0; j < 8; j++, k++)
         {
@@ -354,9 +355,13 @@ int init(team_type team[], int *teamQtt)
             }
         }
     }
-    //teamInd
     return students;
 }
+
+/*
+    Function to show the average ages of the participants.
+*/
+
 int averageAge(team_type team[], int teamQtt, int students)
 {
     int x=0;
@@ -372,6 +377,11 @@ int averageAge(team_type team[], int teamQtt, int students)
     x=x/students;
     return x;
 }
+
+/*
+    Function to show the less time spent team.
+*/
+
 int wastedTime (activity_type activity[], int ActNum)
 {
     float x=50000;
@@ -382,6 +392,10 @@ int wastedTime (activity_type activity[], int ActNum)
     }
     return x;
 }
+
+/*
+    Function to search students.
+*/
 
 void searchStudents (team_type team[], char name[21], int teamQtt)
 {
@@ -401,6 +415,10 @@ void searchStudents (team_type team[], char name[21], int teamQtt)
         }
     }
 }
+
+/*
+    Function to show a team's students.
+*/
 
 void showATeam(team_type team[], char teamToShow[], int teamQtt)
 {
@@ -422,6 +440,10 @@ void showATeam(team_type team[], char teamToShow[], int teamQtt)
     }
 }
 
+/*
+    Function to fill the activities.
+*/
+
 int fillActivity(activity_type activity[])
 {
     int i;
@@ -432,8 +454,45 @@ int fillActivity(activity_type activity[])
     return i;
 }
 
+/*
+    Function to show the total and average of the correct answers by teams.
+*/
+
+void totalAverage(team_type team[],  char teamToShow[], int teamQtt)
+{
+    int i,j,k;
+
+    char arr[7];
+
+    int sum = 0, count = 0;
+    float average;
+    for(i = 0; i < teamQtt; i++)
+    {
+        strcpy(arr, team[i].name);
+        if(!strcmp(team[i].name, teamToShow))
+        {
+            for(j = 0; j < 8; j++)
+            {
+                for(k = 0; k < 5; k++)
+                {
+                    sum = sum + team[i].student[j].activity[k].NC;
+                    count++;
+                }
+            }
+            average = (float)sum / count;
+            printf("\nThe total answers of team %s: %d\n", teamToShow, sum);
+            printf("The average answers of team %s: %f\n\n", teamToShow, average);
+            printf("Press a key to continue.");
+            getchar();
+            return;
+        }
+    }
+}
+
 int main()
 {
+    //variables for the main function
+
     student_type student[MAX];
     activity_type activity[100];
     team_type teams[100];
@@ -570,7 +629,12 @@ int main()
                         switch(ch)
                         {
                             case '1':
-                                { //total and average right answers of a team
+                                {
+                                    //total and average right answers of a team
+                                    printf("Enter the team: ");
+                                    gets(teamToShow);
+                                    fflush(stdin);
+                                    totalAverage(teams,teamToShow,teamQtt);
                                 break;
                                 }
                             case '2':
@@ -590,7 +654,7 @@ int main()
                 break;
                 }
             case '5':
-                { 
+                {
                     printf("Work made by:\n");
                     printf("João Figueiredo 1170655\n");
                     printf("Döme Oláh 1170237\n");
