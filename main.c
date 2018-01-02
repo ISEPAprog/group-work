@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define MAX 30
+#define NR 30
 
 typedef struct activity
 {
@@ -63,7 +64,7 @@ int insertStudent (team_type team[], int oldStudentIndex, int newStudentIndex, c
         do
         {
             printf("Student's age %d?\n",i+1);
-            scanf("%d", &team[j].student[i].name);
+            scanf("%c", &team[j].student[i].name);
             fflush(stdin);
         }while(team[j].student[i].age < 0 || team[j].student[i].age > 150);
         do
@@ -227,7 +228,7 @@ char form()
         printf("1- Manage students.\n");
         printf("2- Manage activities.\n");
         printf("3- Manage teams.\n");
-        printf("4- In progress.\n");
+        printf("4- Team info.\n");
         printf("5- In progress.\n");
         printf("s/S- Exit.\n");
         r=getch();
@@ -292,19 +293,19 @@ char formTeamMan()
     char r;
     do
     {
-        printf("\n---Team Section---\n");
-        printf("1- Insert a new team.\n");
-        printf("2- Show teams.\n");
-        printf("3- Delete a team.\n");
-        printf("4- Search a team.\n");
+        printf("\n---Team Info---\n");
+        printf("1- Right answers.\n");
+        printf("2- Average Age.\n");
+        printf("3- Time per activity.\n");
         printf("r/R- Return to menu.\n");
         r=getch();
     }
-    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3' && r!='4');
+    while (r!='r' && r!='R' && r!='1' && r!='2' && r!='3');
     return r;
 }
 
-void init(team_type team[])
+
+int init(team_type team[], int *teamQtt)
 {
     int i,j,k = 0,m = 0;
     int randomAge,randomID,randomNC,randomTime;
@@ -319,6 +320,8 @@ void init(team_type team[])
                                     /*"name49","name50","name51","name52","name53","name54","name55","name56"     //7th team
                                     "name57","name58","name59","name60","name61","name62","name63","name64"     //8th team*/
                                  };
+    int students=6*8;
+    (*teamQtt)=6;
     for(i = 0; i < 6; i++)
     {
         strcpy(team[i].name,teamNames[i]);                          //Gives initial values to the structure
@@ -355,16 +358,64 @@ void init(team_type team[])
             }
         }
     }
-    teamInd
+    //teamInd
+    return students;
+}
+int averageAge(team_type team[], int teamQtt, int students)
+{
+    int x=0;
+    int i,j;
+
+    for(i=0;i<6;i++)
+    {
+        for (j=0;j<8;j++)
+        {
+            x=x+team[i].student[j].age;
+        }
+    }
+    x=x/students;
+    return x;
+}
+int wastedTime (activity_type activity[], int ActNum)
+{
+    float x=50000;
+    int i;
+    for (i=0;i<ActNum;i++)
+    {
+        if (x>activity[i].time)x=activity[i].time;
+    }
+    return x;
 }
 
-void fillActivity(activity_type activity[])
+void searchStudents (team_type team[], char name[21], int teamQtt)
+{
+    int x=0,y=0,i,j;
+    for (i=0;i<teamQtt;i++)
+    {
+        for (j=0;j<8;i++)
+            {
+                if(strcmp(team[i].student[j].name, name))x=i,y=j;
+            }
+    }
+    if(x!=0)
+        {
+            printf("--- Student---\n");
+            printf("Name: \t%s\n",team[x].student[y].name);
+            printf("Age: \t%d\n",team[x].student[y].age);
+            printf("Gender: %c\n\n",team[x].student[y].sex);
+        }
+    else printf("Not found!!!");
+}
+
+
+int fillActivity(activity_type activity[])
 {
     int i;
     for(i = 0; i < 10; i++)
     {
-        activity[i].id = rand()
+        activity[i].id = rand();
     }
+    return 10;
 }
 
 int main()
@@ -375,14 +426,16 @@ int main()
     int oldStudentIndex = 0, newStudentIndex = 0, studentsToInsert = 0;
     char studentToDelete[21];
     char teamToInsert[21];
+    char studentToSearch[21];
     int oldActivityIndex = 0, newActivityIndex = 0, activitiesToInsert = 0;
     int activityToDelete = 0;
     int oldTeamIndex = 0, newTeamIndex = 0, teamsToInsert = 0;
     char ch;
+    int students=0,teamQtt=0, aAge=0, timeWasted=0,ActNum;
 
-    fillActivity(activity);
+    ActNum=fillActivity(activity);
 
-    init(teams);
+    students=init(teams, &teamQtt);
     oldStudentIndex = teamInd;
     newStudentIndex = oldStudentIndex;
     do
@@ -413,7 +466,7 @@ int main()
                             case '2':
                                 {
                                     //show student
-                                    showStudents(teams, newStudentIndex);
+                                    showStudents(teams, teamQtt);
                                     break;
                                 }
                             case '3':
@@ -427,6 +480,11 @@ int main()
                                 }
                             case '4':
                                 { //search student
+                                    printf("Enter the student's name to search: ");
+                                    gets(studentToSearch);
+                                    fflush(stdin);
+                                    searchStudents(student, studentToSearch, teamQtt);
+
                                 break;
                                 }
                         }
@@ -516,10 +574,14 @@ int main()
                                 }
                             case '2':
                                 { //average age
+                                    aAge=averageAge(teams, teamQtt, students);
+                                    printf("\nAverage age of the participants: %d\n",aAge);
                                 break;
                                 }
                             case '3':
                                 { //less time wasted per activity
+                                    timeWasted=wastedTime(activity, ActNum);
+                                    printf("\nTeam with the lowest time: %d\n",timeWasted);
                                 break;
                                 }
                         }
