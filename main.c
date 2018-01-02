@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX 30
 
+#define MAX 30
 
 typedef struct activity
 {
@@ -26,46 +26,77 @@ typedef struct team_prog
     student_type student[9];
 }team_type;
 
+
+int teamInd, studInd[100], actInd[100];
+
+
 /*
 Function to insert the students and save it to the structure.
 */
 
-
-int insertStudent (student_type student[], int oldStudentIndex, int newStudentIndex)
+int insertStudent (team_type team[], int oldStudentIndex, int newStudentIndex, char teamToInsert[])
 {
-    int i;
+    if(newStudentIndex >= 8)
+    {
+        printf("Warning: you can enter at least 8 students.");
+        return newStudentIndex;
+    }
+
+    int i,j,teamLength;
+    teamLength = 100;
+    for(i = 0; i < teamLength; i++)
+    {
+        if(!strcmp(team[i].name,teamToInsert))
+        {
+            j = i;
+            break;
+        }
+    }
+
     for (i=oldStudentIndex;i<newStudentIndex;i++)
     {
         printf("\n---Student %d---\n",i+1);
         fflush(stdin);
         printf("Student's name %d?\n",i+1);
-        gets(student[i].name);
+        gets(team[j].student[i].name);
         fflush(stdin);
         do
         {
             printf("Student's age %d?\n",i+1);
-            scanf("%d", &student[i].age);
+            scanf("%d", &team[j].student[i].name);
             fflush(stdin);
-        }while(student[i].age < 0 || student[i].age > 150);
+        }while(team[j].student[i].age < 0 || team[j].student[i].age > 150);
         do
         {
             printf("Student's sex %d? (F/M)\n",i+1);
-            scanf("%c", &student[i].sex);
+            scanf("%c", &team[j].student[i].sex);
             fflush(stdin);
-        }while(student[i].sex != 'F' && student[i].sex != 'M');
+        }while(team[j].student[i].sex != 'F' && team[j].student[i].sex != 'M');
     }
     return i;
+
+
 }
 
-void showStudents (student_type student[], int qtd)
+void showStudents (team_type team[], int qtd)
 {
-    int i;
+    int i,j;
     for (i=0;i<qtd;i++)
     {
-        printf("\n---Student %d---\n",i+1);
-        printf("%s\n",student[i].name);
-        printf("%d\n",student[i].age);
-        printf("%c\n",student[i].sex);
+        printf("\n****** Team %d ******\n\n",i+1);
+        for(j = 0; j < 8; j++)
+        {
+            printf("--- Student %d ---\n", j+1);
+            printf("Name: \t%s\n",team[i].student[j].name);
+            printf("Age: \t%d\n",team[i].student[j].age);
+            printf("Gender: %c\n\n",team[i].student[j].sex);
+            /*for(k = 0;k < 5; k++)
+            {
+                printf("%d\n",team[i].student[j].activity[k].id);
+                printf("%d",team[i].student[j].activity[k].NC);
+                printf("",team[i].student[j].activity[k].time);
+            }*/
+        }
     }
 }
 
@@ -275,26 +306,27 @@ char formTeamMan()
 
 void init(team_type team[])
 {
-    int i,j,k,m = 0;
+    int i,j,k = 0,m = 0;
     int randomAge,randomID,randomNC,randomTime;
     char teamNames[6][7] = { "team1","team2","team3","team4","team5","team6" };
     char teamLocalities[6][11] = { "local1","local2","local3","local4","local5","local6"};
-    char studentNames[64][21] = {  "name1","name2","name3","name4","name5","name6","name7","name8"
-                                    "name9","name10","name11","name12","name13","name14","name15","name16"
-                                    "name17","name18","name19","name20","name21","name22","name23","name24"
-                                    "name25","name26","name27","name28","name29","name30","name31","name32"
-                                    "name33","name34","name35","name36","name37","name38","name39","name40"
-                                    "name41","name42","name43","name44","name45","name46","name47","name48"
-                                    "name49","name50","name51","name52","name53","name54","name55","name56"
-                                    "name57","name58","name59","name60","name61","name62","name63","name64"
+    char studentNames[64][21] = {  "name1","name2","name3","name4","name5","name6","name7","name8",              //1st team
+                                    "name9","name10","name11","name12","name13","name14","name15","name16",      //2nd team
+                                    "name17","name18","name19","name20","name21","name22","name23","name24",     //3rd team
+                                    "name25","name26","name27","name28","name29","name30","name31","name32",     //4th team
+                                    "name33","name34","name35","name36","name37","name38","name39","name40",     //5th team
+                                    "name41","name42","name43","name44","name45","name46","name47","name48"     //6th team
+                                    /*"name49","name50","name51","name52","name53","name54","name55","name56"     //7th team
+                                    "name57","name58","name59","name60","name61","name62","name63","name64"     //8th team*/
                                  };
     for(i = 0; i < 6; i++)
     {
-        strcpy(team[i].name,teamNames[i]);
+        strcpy(team[i].name,teamNames[i]);                          //Gives initial values to the structure
         strcpy(team[i].locality,teamLocalities[i]);
         for(j = 0; j < 8; j++, k++)
         {
             strcpy(team[i].student[j].name,studentNames[k]);
+
             do
             {
                 randomAge = rand() % 30;
@@ -316,31 +348,43 @@ void init(team_type team[])
                 team[i].student[j].activity[m].NC = randomNC;
                 do
                 {
-                    randomTime = rand() % 12;
+                    randomTime = rand() % 720;
                     randomTime = randomTime * 10;
                 }while(randomTime <= 0);
-                team[i].student[j].activity[m].id = randomTime;
+                team[i].student[j].activity[m].time = randomTime;
             }
         }
     }
+    teamInd
 }
 
+void fillActivity(activity_type activity[])
+{
+    int i;
+    for(i = 0; i < 10; i++)
+    {
+        activity[i].id = rand()
+    }
+}
 
 int main()
 {
     student_type student[MAX];
     activity_type activity[100];
-    team_type team[100];
+    team_type teams[100];
     int oldStudentIndex = 0, newStudentIndex = 0, studentsToInsert = 0;
     char studentToDelete[21];
+    char teamToInsert[21];
     int oldActivityIndex = 0, newActivityIndex = 0, activitiesToInsert = 0;
     int activityToDelete = 0;
     int oldTeamIndex = 0, newTeamIndex = 0, teamsToInsert = 0;
-
-    init(team);
-
     char ch;
 
+    fillActivity(activity);
+
+    init(teams);
+    oldStudentIndex = teamInd;
+    newStudentIndex = oldStudentIndex;
     do
     {
         ch = form();
@@ -356,16 +400,20 @@ int main()
                             case '1':
                                 {
                                     //insert new student
-                                    printf("Enter the number of students to save: ");
+                                    printf("Enter the number of students to insert: ");
                                     scanf("%d", &studentsToInsert);
+                                    fflush(stdin);
+                                    printf("Enter the team's name to insert the students: ");
+                                    gets(teamToInsert);
+                                    fflush(stdin);
                                     newStudentIndex = oldStudentIndex + studentsToInsert;
-                                    oldStudentIndex = insertStudent(student, oldStudentIndex, newStudentIndex);
+                                    oldStudentIndex = insertStudent(teams, oldStudentIndex, newStudentIndex, teamToInsert);
                                     break;
                                 }
                             case '2':
                                 {
                                     //show student
-                                    showStudents(student, newStudentIndex);
+                                    showStudents(teams, newStudentIndex);
                                     break;
                                 }
                             case '3':
@@ -373,7 +421,8 @@ int main()
                                     //delete student
                                     printf("Enter the student's name to delete: ");
                                     gets(studentToDelete);
-                                    newStudentIndex = deleteStudent(student, studentToDelete, newStudentIndex);
+                                    fflush(stdin);
+                                    newStudentIndex = deleteStudent(teams, studentToDelete, newStudentIndex);
                                     break;
                                 }
                             case '4':
@@ -397,13 +446,13 @@ int main()
                                     printf("Enter the number of activities to save: ");
                                     scanf("%d", &activitiesToInsert);
                                     newActivityIndex = oldActivityIndex + activitiesToInsert;
-                                    oldActivityIndex = insertActivity(activity, oldActivityIndex, newActivityIndex);
+                                    oldActivityIndex = insertActivity(teams, oldActivityIndex, newActivityIndex);
                                     break;
                                 }
                             case '2':
                                 {
                                     //show activity
-                                    showActivities(activity, newActivityIndex);
+                                    showActivities(teams, newActivityIndex);
                                     break;
                                 }
                             case '3':
@@ -411,7 +460,7 @@ int main()
                                     //delete activity
                                     printf("Enter the activity's ID to delete: ");
                                     scanf("%d", &activityToDelete);
-                                    newActivityIndex = deleteActivity(activity, activityToDelete, newActivityIndex);
+                                    newActivityIndex = deleteActivity(teams, activityToDelete, newActivityIndex);
                                     break;
                                 }
                             case '4':
@@ -439,7 +488,8 @@ int main()
                                 }
                             case '2':
                                 { //show teams (alphabetically sorted)
-                                break;
+
+                                    break;
                                 }
                             case '3':
                                 { //delete team
